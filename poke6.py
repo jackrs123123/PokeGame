@@ -1,5 +1,6 @@
 '''
-Critical hits and missed hit probabilities are added in the move functions! Outcome is also added to move functions.
+Critical hits and missed hit probabilities are added in the move functions! Outcome is also added to move functions. (3/29/24)
+  - Things to add: Speed factor, Items?
 '''
 
 import random
