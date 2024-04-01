@@ -69,3 +69,46 @@ def user_choice(): # allows player to make choices throughout duration of game
                     damage_moves['PUNCH'][4]
                   )
             damage_moves['PUNCH'][1] -= 1
+                  else:
+            t1()
+            print('Not enough PP for move!')
+    elif u_inp == damage_moves['KICK'][7]: # if = k
+        if damage_moves['KICK'][1] > 0:
+            t1()
+            print('you used KICK!')
+            enemy_hp = d_move(
+                    enemy_hp,
+                    damage_moves['KICK'][0],
+                    damage_moves['KICK'][2],
+                    damage_moves['KICK'][3],
+                    damage_moves['KICK'][4]
+                )
+            damage_moves['KICK'][1] -= 1
+        else:
+            t1()
+            print('Not enough PP for move!')
+    else:
+        t1()
+        print('not valid move!')
+
+def enemy_choice():
+
+    global user_hp, enemy_hp
+
+    en_inp = random.choice([list(damage_moves)[2], list(misc_moves)[0]])
+
+    if en_inp == damage_moves['FURY'][7]: # if = FURY
+        if damage_moves['FURY'][1] > 0:
+            t1()
+            print('Enemy used FURY!')
+            user_hp = d_move(
+                    user_hp,
+                    damage_moves['FURY'][0],
+                    damage_moves['FURY'][2],
+                    damage_moves['FURY'][3],
+                    damage_moves['FURY'][4]
+                )
+            damage_moves['FURY'][1] -= 1
+        else:
+            t1()
+            print('Enemy move is null!')
