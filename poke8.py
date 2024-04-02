@@ -69,7 +69,7 @@ def user_choice(): # allows player to make choices throughout duration of game
                     damage_moves['PUNCH'][4]
                   )
             damage_moves['PUNCH'][1] -= 1
-                  else:
+        else:
             t1()
             print('Not enough PP for move!')
     elif u_inp == damage_moves['KICK'][7]: # if = k
