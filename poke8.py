@@ -1,5 +1,6 @@
 '''
-UNFINISHED
+eighth iteration with revamped move functions, (4/1/24) Jack RS
+    - Things to add: a menu screen [Fight, Item, Switch], help command
 '''
 
 import time, random
@@ -22,7 +23,6 @@ def d_move(hp, dam, crit, crit_chance, miss_chance):
     Use Method:
         - choice functions will state attack used, d_move states if it was a missed or critical hit (along with total_dam for appropriate outcome)
     '''
-
     miss_chance = random.choice(range(miss_chance[0], miss_chance[1]+1))
     if miss_chance != 1:
         crit_chance = random.choice(range(crit_chance[0], crit_chance[1]+1))
@@ -30,7 +30,7 @@ def d_move(hp, dam, crit, crit_chance, miss_chance):
             total_dam = dam
             hp -= total_dam
             t1()
-            print(total_dam, 'was dealt.')
+            print(total_dam, 'damage was dealt.')
             return hp
         else:
             total_dam = dam + crit
@@ -38,11 +38,25 @@ def d_move(hp, dam, crit, crit_chance, miss_chance):
             t1()
             print('Critical hit!')
             t1()
-            print(total_dam, 'was dealt.')
+            print(total_dam, 'damage was dealt.')
             return hp
     else:
         t1()
         print('It missed!')
+        return hp
+
+def m_move(hp, eff):
+    bound = 100 - eff
+    if hp >= bound:
+        dif = 100 - hp
+        hp = 100
+        t1()
+        print('Enemy used RECOVER and gained', dif, 'health back!')
+        return hp
+    elif hp < bound:
+        hp += eff
+        t1()
+        print('Enemy used RECOVER and gained', eff, 'health back!')
         return hp
 
 def t1():
@@ -53,11 +67,11 @@ def user_choice(): # allows player to make choices throughout duration of game
     global user_hp, enemy_hp
 
     t1()
-    print(list(damage_moves.keys()))
+    print(list(damage_moves.keys())[0:2])
 
     u_inp = input()
 
-    if u_inp == damage_moves['PUNCH'][7]: # if = p
+    if u_inp == damage_moves['PUNCH'][5]: # if = p
         if damage_moves['PUNCH'][1] > 0: # if pp > 0
             t1()
             print('you used PUNCH!')
@@ -72,7 +86,7 @@ def user_choice(): # allows player to make choices throughout duration of game
         else:
             t1()
             print('Not enough PP for move!')
-    elif u_inp == damage_moves['KICK'][7]: # if = k
+    elif u_inp == damage_moves['KICK'][5]: # if = k
         if damage_moves['KICK'][1] > 0:
             t1()
             print('you used KICK!')
@@ -97,7 +111,7 @@ def enemy_choice():
 
     en_inp = random.choice([list(damage_moves)[2], list(misc_moves)[0]])
 
-    if en_inp == damage_moves['FURY'][7]: # if = FURY
+    if en_inp == damage_moves['FURY'][5]: # if = FURY
         if damage_moves['FURY'][1] > 0:
             t1()
             print('Enemy used FURY!')
@@ -112,3 +126,54 @@ def enemy_choice():
         else:
             t1()
             print('Enemy move is null!')
+    else:
+        if misc_moves['RECOVER'][1] > 0:
+            if enemy_hp == 100:
+                if damage_moves['FURY'][1] > 0:
+                    t1()
+                    print('Enemy used FURY!')
+                    user_hp = d_move(
+                                        user_hp,
+                                        damage_moves['FURY'][0],
+                                        damage_moves['FURY'][2],
+                                        damage_moves['FURY'][3],
+                                        damage_moves['FURY'][4]
+                                    )
+                    damage_moves['FURY'][1] -= 1
+                else:
+                    t1()
+                    print('Enemy move is null!')
+            else:
+                enemy_hp = m_move(
+                                  enemy_hp,
+                                  misc_moves['RECOVER'][0]
+                                 )
+                misc_moves['RECOVER'][1] -= 1
+        else:
+            t1()
+            print('Enemy move is null')
+
+Game = True
+
+while Game:
+    t1()
+    print('You:', user_hp, 'Enemy:', enemy_hp)
+    user_choice()
+    if enemy_hp <= 0:
+        t1()
+        print('You:', user_hp, 'Enemy:', enemy_hp)
+        t1()
+        print('Enemy died!')
+        t1()
+        print('You have won the battle!')
+        Game = False
+    else:
+        enemy_choice()
+        if user_hp <= 0:
+            t1()
+            print('You:', user_hp, 'Enemy:', enemy_hp)
+            t1()
+            print('You died!')
+            t1()
+            print('You have lost the battle!')
+            Game = False
